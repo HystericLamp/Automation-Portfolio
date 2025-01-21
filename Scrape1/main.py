@@ -3,6 +3,11 @@ import platform
 import os
 import sys
 
+"""
+    Main function that updates requirements.txt with any new dependencies
+    and runs the scraper
+"""
+
 """Update any new dependencies added"""
 def update_requirements():
     # Check if a virtual environment is active
@@ -22,9 +27,11 @@ def update_requirements():
 def activate_and_run():
     os_type = platform.system()
 
+    # If OS is Windows
     if os_type == "Windows":
         activate_script = os.path.join(".venv", "Scripts", "activate")
     else:
+        # If OS is Linux/Mac
         activate_script = os.path.join(".venv", "bin", "activate")
 
     # Command to activate the environment and run the scraper
