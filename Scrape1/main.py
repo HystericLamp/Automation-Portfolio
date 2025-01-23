@@ -2,11 +2,13 @@ import subprocess
 import platform
 import os
 import sys
+from src.scraper import Scraper
 
 """
     Main function that updates requirements.txt with any new dependencies
     and runs the scraper
 """
+URL_TO_SCRAPE = "https://books.toscrape.com/"
 
 """Update any new dependencies added"""
 def update_requirements():
@@ -35,7 +37,10 @@ def activate_and_run():
         activate_script = os.path.join(".venv", "bin", "activate")
 
     # Command to activate the environment and run the scraper
-    command = f"{activate_script} && python src/scraper.py"
+    command = f"{activate_script}"
+    scraper = Scraper(URL_TO_SCRAPE)
+    scraper.connect_and_open()
+    scraper.end_scrape()
 
     # Run the command
     subprocess.run(command, shell=True)
