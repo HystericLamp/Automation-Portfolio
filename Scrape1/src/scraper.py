@@ -1,4 +1,3 @@
-from parsel import Selector
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
@@ -33,6 +32,9 @@ class Scraper:
             EC.presence_of_element_located((By.CSS_SELECTOR, 'div[class]'))
         )
 
+    def parse_contents(self):
+        print(self.driver.page_source)
+
     def end_scrape(self):
-        print("Closing driver")
+        print("Closing driver...")
         self.driver.quit()

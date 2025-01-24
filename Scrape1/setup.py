@@ -33,7 +33,17 @@ print("Installing selenium...")
 subprocess.check_call([os.path.join(venv_dir, "bin", "pip") if os.name != "nt" else os.path.join(venv_dir, "Scripts", "pip"), "install", "selenium"])
 print("Selenium installed successfully.")
 
-# Install Parsel in the virtual environment
-print("Installing selenium...")
-subprocess.check_call([os.path.join(venv_dir, "bin", "pip") if os.name != "nt" else os.path.join(venv_dir, "Scripts", "pip"), "install", "parsel"])
-print("Selenium installed successfully.")
+# Install Beautifulsoup in the virtual environment
+print("Installing Beautifulsoup...")
+subprocess.check_call([os.path.join(venv_dir, "bin", "pip") if os.name != "nt" else os.path.join(venv_dir, "Scripts", "pip"), "install", "beautifulsoup4"])
+print("Beautifulsoup installed successfully.")
+
+# Install Requests in the virtual environment
+print("Installing Requests...")
+subprocess.check_call([os.path.join(venv_dir, "bin", "python") if os.name != "nt" else os.path.join(venv_dir, "Scripts", "python"), "-m", "pip", "install", "requests"])
+print("Requests installed successfully.")
+
+# Install Pandas in the virtual environment
+print("Installing Pandas...")
+subprocess.check_call([os.path.join(venv_dir, "bin", "pip") if os.name != "nt" else os.path.join(venv_dir, "Scripts", "pip"), "install", "pandas"])
+print("Pandas installed successfully.")

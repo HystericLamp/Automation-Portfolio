@@ -38,12 +38,12 @@ def activate_and_run():
 
     # Command to activate the environment and run the scraper
     command = f"{activate_script}"
+    subprocess.run(command, shell=True)
+    
     scraper = Scraper(URL_TO_SCRAPE)
     scraper.connect_and_open()
+    scraper.extract_contents()
     scraper.end_scrape()
-
-    # Run the command
-    subprocess.run(command, shell=True)
 
 if __name__ == "__main__":
     activate_and_run()
