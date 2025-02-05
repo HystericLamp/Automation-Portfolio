@@ -28,11 +28,6 @@ else:  # Unix or MacOS
 
 print(f"To activate the virtual environment, run: source {activate_script}" if os.name != "nt" else f"Run: {activate_script}")
 
-# Install selenium in the virtual environment
-print("Installing selenium...")
-subprocess.check_call([os.path.join(venv_dir, "bin", "pip") if os.name != "nt" else os.path.join(venv_dir, "Scripts", "pip"), "install", "selenium"])
-print("Selenium installed successfully.")
-
 # Install Beautifulsoup in the virtual environment
 print("Installing Beautifulsoup...")
 subprocess.check_call([os.path.join(venv_dir, "bin", "pip") if os.name != "nt" else os.path.join(venv_dir, "Scripts", "pip"), "install", "beautifulsoup4"])

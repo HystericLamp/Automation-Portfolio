@@ -41,9 +41,6 @@ def activate_and_run():
     subprocess.run(command, shell=True)
     
     scraper = Scraper(URL_TO_SCRAPE)
-    scraper.connect_and_open()
-    scraper.extract_contents()
-    scraper.end_scrape()
 
 if __name__ == "__main__":
     activate_and_run()
