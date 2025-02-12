@@ -2,7 +2,9 @@ import subprocess
 import platform
 import os
 import sys
+
 from src.scraper import Scraper
+from src.exceptions.failed_response_exception import FailedResponseException
 
 """
     Main function that updates requirements.txt with any new dependencies
@@ -40,7 +42,10 @@ def activate_and_run():
     command = f"{activate_script}"
     subprocess.run(command, shell=True)
     
+    # Run Scraper
     scraper = Scraper(URL_TO_SCRAPE)
+    scraper.connect_and_parse()
+    scraper.write_data_to_excel()
 
 if __name__ == "__main__":
     activate_and_run()
