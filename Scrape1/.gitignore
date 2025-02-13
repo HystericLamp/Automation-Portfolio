@@ -163,3 +163,6 @@ Thumbs.db
 
 # Temporary Files
 ~$*
+
+#Ignore all xlsx files
+*.xlsx
