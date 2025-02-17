@@ -166,3 +166,6 @@ Thumbs.db
 
 #Ignore all xlsx files
 *.xlsx
+
+# Ignore data folder
+src/data
