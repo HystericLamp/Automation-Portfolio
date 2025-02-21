@@ -38,9 +38,9 @@ class TestScraperMethods(unittest.TestCase):
             self.scraper.connect(self.scraper.base_url)
 
         self.assertIn(
-        "Could not connect to server... Server returned with error code 404",
-        str(context.exception).replace("\n", "").strip()
-)
+            "Could not connect to server... Server returned with error code 404",
+            str(context.exception).replace("\n", "").strip()
+        )
 
     def test_categories(self):
         mock_response = Response()
