@@ -22,13 +22,13 @@ class Scraper:
         return response
 
     def get_genres(self, response):
-        """Scrape and return all category links."""
+        """Scrape and return all category/genre links."""
         
         soup = BeautifulSoup(response.text, "html.parser")
         genres = []
         genre_links = {}
         
-        # Find all category links
+        # Find all category/genre links
         web_links = soup.select(".side_categories ul li ul li a")
         
         for cat in web_links:
@@ -56,7 +56,7 @@ class Scraper:
                 for book in books:
                     title = book.h3.a["title"]
                     price = book.find("p", class_="price_color").text
-                    books_data.append((title, price))
+                    books_data.append((title, genre, price))
 
                 print(f"Scraped page {current_page} of {genre}")
 
@@ -67,17 +67,25 @@ class Scraper:
                 else:
                     break  # Stop when there's no Next button
         
-
+        return books_data
+        
 
     def write_data_to_excel(self, books_data):
         """Writes all data into an excel file."""
         workbook = xlsxwriter.Workbook('books_data.xlsx')
-        worksheet = workbook.add_worksheet()
+        worksheet = workbook.add_worksheet("Books_Data")
 
-        row = 0
-        for title, price in books_data:
+        # Write headers
+        worksheet.write(0, 0, "Title")
+        worksheet.write(0, 1, "Genre")
+        worksheet.write(0, 2, "Price")
+
+        # Fill in columns
+        row = 1
+        for title, genre, price in books_data:
             worksheet.write(row, 0, title)
-            worksheet.write(row, 1, price)
+            worksheet.write(row, 1, genre)
+            worksheet.write(row, 2, price)
             row += 1
 
         workbook.close()

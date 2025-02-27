@@ -43,7 +43,17 @@ print("Installing XlsxWriter...")
 subprocess.check_call([os.path.join(venv_dir, "bin", "pip") if os.name != "nt" else os.path.join(venv_dir, "Scripts", "pip"), "install", "XlsxWriter"])
 print("XlsxWriter installed successfully.")
 
+# Install pandas in the virtual environment
+print("Installing pandas...")
+subprocess.check_call([os.path.join(venv_dir, "bin", "pip") if os.name != "nt" else os.path.join(venv_dir, "Scripts", "pip"), "install", "pandas"])
+print("pandas installed successfully.")
+
 # Install python-docx in the virtual environment
 print("Installing python-docx...")
 subprocess.check_call([os.path.join(venv_dir, "bin", "pip") if os.name != "nt" else os.path.join(venv_dir, "Scripts", "pip"), "install", "python-docx"])
 print("python-docx installed successfully.")
+
+# Install openpyxl in the virtual environment
+print("Installing openpyxl...")
+subprocess.check_call([os.path.join(venv_dir, "bin", "pip") if os.name != "nt" else os.path.join(venv_dir, "Scripts", "pip"), "install", "openpyxl"])
+print("openpyxl installed successfully.")
