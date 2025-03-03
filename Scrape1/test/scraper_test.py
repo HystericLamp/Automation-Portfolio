@@ -38,6 +38,7 @@ class TestScraperMethods(unittest.TestCase):
 
     @patch("src.scraper.requests.get")
     def test_connect_success(self, mock_get):
+        """Tests the connect function to see how it responds to successful connection"""
         mock_response = Response()
         mock_response.status_code = 200
         mock_response._content = b"Fake response content"
@@ -49,6 +50,7 @@ class TestScraperMethods(unittest.TestCase):
 
     @patch("src.scraper.requests.get")
     def test_connect_failure(self, mock_get):
+        """Tests the connect function to respond to a failure connection"""
         mock_response = Response()
         mock_response.status_code = 404
         mock_get.return_value = mock_response
@@ -62,6 +64,7 @@ class TestScraperMethods(unittest.TestCase):
         )
 
     def test_genres_extraction(self):
+        """Tests the get_genres function to see if it can parse the genres from the site"""
         mock_response = Response()
         mock_response.status_code = 200
         mock_response._content = b"""
@@ -116,6 +119,7 @@ class TestScraperMethods(unittest.TestCase):
     @classmethod
     def tearDownClass(self):
         """Runs once after all tests finish."""
+        # Delete the created excel file for this test
         if os.path.exists(FILENAME):
             os.remove(FILENAME)
 
