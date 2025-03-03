@@ -23,6 +23,19 @@ class TestScraperMethods(unittest.TestCase):
         """Runs once before any tests execute."""
         self.scraper = Scraper(URL_TO_SCRAPE)
 
+        # Ensure Excel file is created before tests
+        books_data = [("book1", "genre1", "$1.00"),
+                      ("book2", "genre2", "$2.00"),
+                      ("book3", "genre3", "$3.00"),
+                      ("book4", "genre4", "$4.00"),
+                      ("book5", "genre5", "$5.00"),
+                      ("book6", "genre6", "$6.00"),
+                      ("book7", "genre7", "$7.00"),
+                      ("book8", "genre8", "$8.00"),
+                      ("book9", "genre9", "$9.00")]
+        
+        self.scraper.write_data_to_excel(books_data)
+
     @patch("src.scraper.requests.get")
     def test_connect_success(self, mock_get):
         mock_response = Response()
@@ -72,18 +85,6 @@ class TestScraperMethods(unittest.TestCase):
 
     def test_excel_creation(self):
         """Check if the correct file exist."""
-        books_data = [("book1", "genre1", "$1.00"),
-                      ("book2", "genre2", "$2.00"),
-                      ("book3", "genre3", "$3.00"),
-                      ("book4", "genre4", "$4.00"),
-                      ("book5", "genre5", "$5.00"),
-                      ("book6", "genre6", "$6.00"),
-                      ("book7", "genre7", "$7.00"),
-                      ("book8", "genre8", "$8.00"),
-                      ("book9", "genre9", "$9.00")]
-        
-        self.scraper.write_data_to_excel(books_data)
-
         self.assertTrue(os.path.exists(FILENAME))
 
     def test_excel_sheet_names(self):
