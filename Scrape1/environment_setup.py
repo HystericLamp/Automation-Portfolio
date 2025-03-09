@@ -5,7 +5,6 @@ import sys
 """
     This Script helps to setup environment by automatically
     creating a virtual environment and installs dependencies:
-    - Selenium
 """
 
 # Define the virtual environment directory
