@@ -27,7 +27,33 @@ else:  # Unix or MacOS
 
 print(f"To activate the virtual environment, run: source {activate_script}" if os.name != "nt" else f"Run: {activate_script}")
 
+#####################################################################
+# Unit Test Dependencies
+#####################################################################
 # Install Pytest in the virtual environment
-print("Installing Pytest...")
-subprocess.check_call([os.path.join(venv_dir, "bin", "pip") if os.name != "nt" else os.path.join(venv_dir, "Scripts", "pip"), "install", "pytest"])
-print("Pytest installed successfully.")
+print("Installing Unit Test Dependencies...")
+print("Installing pytest...")
+subprocess.check_call([os.path.join(venv_dir, "bin", "pip") if os.name != "nt" 
+                       else os.path.join(venv_dir, "Scripts", "pip"), "install", "pytest"])
+print("pytest installed successfully.")
+
+######################################################################
+# Email Access Dependencies
+######################################################################
+print("Installing Email Access Dependencies...")
+print("Installing imapclient...")
+subprocess.check_call([os.path.join(venv_dir, "bin", "pip") if os.name != "nt" 
+                       else os.path.join(venv_dir, "Scripts", "pip"), "install", "imapclient"])
+print("imapclient installed successfully.")
+
+######################################################################
+# Gmail API Dependencies
+######################################################################
+print("Installing Gmail API Dependencies...")
+print("Installing google-auth, google-auth-oauthlib, google-auth-httplib2, google-api-python-client...")
+subprocess.check_call([os.path.join(venv_dir, "bin", "pip") if os.name != "nt" 
+                       else os.path.join(venv_dir, "Scripts", "pip"), "install", "google-auth",
+                                                                                 "google-auth-oauthlib",
+                                                                                 "google-auth-httplib2",
+                                                                                 "google-api-python-client"])
+print("google-auth, google-auth-oauthlib, google-auth-httplib2, google-api-python-client installed successfully.")
