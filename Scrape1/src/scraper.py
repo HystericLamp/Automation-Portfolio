@@ -23,7 +23,6 @@ class Scraper:
 
     def get_genres(self, response):
         """Scrape and return all category/genre links."""
-        
         soup = BeautifulSoup(response.text, "html.parser")
         genres = []
         genre_links = {}
