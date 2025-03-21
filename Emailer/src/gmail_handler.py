@@ -1,4 +1,5 @@
 import os.path
+import sys
 import base64
 from googleapiclient.discovery import build
 from google.auth.transport.requests import Request
@@ -15,10 +16,16 @@ class gmailer:
     def authenticate_gmail():
         """authorize the application and generate a token.json file for future API requests"""
         creds = None
+        # Define path to token.json in data folder
+        token_path = os.path.join('data', 'token.json')
+
+        data_folder = os.path.dirname(token_path)
+        if not os.path.exists(data_folder):
+            os.makedirs(data_folder)
 
         # Check if token.json already exists
-        if os.path.exists('token.json'):
-            creds = Credentials.from_authorized_user_file('token.json')
+        if os.path.exists(token_path):
+            creds = Credentials.from_authorized_user_file(token_path)
 
         # If no valid credentials available, authenticate user
         if not creds or not creds.valid:
@@ -26,16 +33,16 @@ class gmailer:
                 creds.refresh(Request())
         else:
             # Load credentials.json (OAuth file)
-            flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
+            flow = InstalledAppFlow.from_client_secrets_file(os.path.join('data', 'credentials.json'), SCOPES)
             creds = flow.run_local_server(port=0)
 
         # Save token for future use
-        with open('token.json', 'w') as token:
+        with open(token_path, 'w') as token:
             token.write(creds.to_json())
 
         return build('gmail', 'v1', credentials=creds)
 
-    def fetch_undread_emails(service):
+    def fetch_unread_emails(service):
         """Fetch unread emails from gmail account"""
         # List unread messages
         results = service.users().messages().list(userId='me', labelIds=['INBOX'], q="is:unread").execute()
