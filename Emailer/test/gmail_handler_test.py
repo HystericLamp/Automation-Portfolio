@@ -2,6 +2,7 @@ import sys
 import os
 import unittest
 from unittest.mock import patch, MagicMock, Mock
+import base64
 
 # Get the absolute path of the src folder and add it to sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
@@ -45,10 +46,12 @@ class GmailTest(unittest.TestCase):
 
     @patch('gmail_handler.gmailer.authenticate_gmail')
     def setUp(self, mock_auth):
+        """Setup mock service"""
         self.mock_service = Mock()
         mock_auth.return_value = self.mock_service
 
     def test_fetch_unread_emails_no_emails(self):
+        """Testing a gmail fetch when there are no unread emails"""
         self.mock_service.users().messages().list.return_value.execute.return_value = {
             'messages': []
         }
@@ -56,7 +59,49 @@ class GmailTest(unittest.TestCase):
         emails = gmailer.fetch_unread_emails(self.mock_service)
         self.assertEqual(emails, [])
 
-    
+    def test_fetch_unread_emails_with_emails(self):
+        """Testing a gmail fetch when there is some unread mail"""
+        self.mock_service.users().messages().list.return_value.execute.return_value = {
+            'messages': [{'id': '123'}, {'id': '456'}]
+        }
+
+        mock_msg_1 = {
+            'payload': {
+                'headers': [
+                    {'name': 'From', 'value': 'sender1@example.com'},
+                    {'name': 'Subject', 'value': 'Subject 1'}
+                ],
+                'parts': [{'mimeType': 'text/plain', 'body': {'data': base64.urlsafe_b64encode(b'Body 1').decode()}}]
+            }
+        }
+
+        mock_msg_2 = {
+            'payload': {
+                'headers': [
+                    {'name': 'From', 'value': 'sender2@example.com'},
+                    {'name': 'Subject', 'value': 'Subject 2'}
+                ],
+                'parts': [{'mimeType': 'text/plain', 'body': {'data': base64.urlsafe_b64encode(b'Body 2').decode()}}]
+            }
+        }
+
+        self.mock_service.users().messages().get.side_effect = [
+            Mock(execute=Mock(return_value=mock_msg_1)),
+            Mock(execute=Mock(return_value=mock_msg_2))
+        ]
+
+        emails = gmailer.fetch_unread_emails(self.mock_service)
+        self.assertEqual(len(emails), 2)
+        self.assertEqual(emails[0], ('sender1@example.com', 'Subject 1', 'Body 1', '123'))
+        self.assertEqual(emails[1], ('sender2@example.com', 'Subject 2', 'Body 2', '456'))
+
+    def test_send_gmail_response_success(self):
+        """Testing the gmail response"""
+        self.mock_service.users().messages().send.return_value.execute.return_value = {'id': 'abc123'}
+        
+        with patch('builtins.print') as mock_print:
+            gmailer.send_gmail_response(self.mock_service, 'to@example.com', 'Test Subject', 'Test Body')
+            mock_print.assert_called_with('Email sent to to@example.com')
     
 if __name__ == '__main__':
     unittest.main()
