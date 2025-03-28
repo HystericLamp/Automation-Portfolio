@@ -9,6 +9,9 @@ from email.mime.text import MIMEText
 
 SCOPES = ['https://www.googleapis.com/auth/gmail.modify']
 
+token_path = os.path.join(os.path.dirname(__file__), 'data', 'token.json')
+creds_path = os.path.join(os.path.dirname(__file__), 'data', 'credentials.json')
+
 class gmailer:
     """
         Class that handles gmail API requests and operations on gmail
@@ -16,8 +19,6 @@ class gmailer:
     def authenticate_gmail():
         """authorize the application and generate a token.json file for future API requests"""
         creds = None
-        # Define path to token.json in data folder
-        token_path = os.path.join('data', 'token.json')
 
         data_folder = os.path.dirname(token_path)
         if not os.path.exists(data_folder):
@@ -31,10 +32,10 @@ class gmailer:
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
-        else:
-            # Load credentials.json (OAuth file)
-            flow = InstalledAppFlow.from_client_secrets_file(os.path.join('data', 'credentials.json'), SCOPES)
-            creds = flow.run_local_server(port=0)
+            else:
+                # Load credentials.json (OAuth file)
+                flow = InstalledAppFlow.from_client_secrets_file(creds_path, SCOPES)
+                creds = flow.run_local_server(port=0)
 
         # Save token for future use
         with open(token_path, 'w') as token:

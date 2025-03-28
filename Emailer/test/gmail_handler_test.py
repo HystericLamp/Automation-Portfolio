@@ -96,7 +96,7 @@ class GmailTest(unittest.TestCase):
         self.assertEqual(emails[1], ('sender2@example.com', 'Subject 2', 'Body 2', '456'))
 
     def test_send_gmail_response_success(self):
-        """Testing the gmail response"""
+        """Testing the gmail success response"""
         self.mock_service.users().messages().send.return_value.execute.return_value = {'id': 'abc123'}
         
         with patch('builtins.print') as mock_print:
