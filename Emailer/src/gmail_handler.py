@@ -9,8 +9,8 @@ from email.mime.text import MIMEText
 
 SCOPES = ['https://www.googleapis.com/auth/gmail.modify']
 
-token_path = os.path.join(os.path.dirname(__file__), 'data', 'token.json')
 creds_path = os.path.join(os.path.dirname(__file__), 'data', 'credentials.json')
+token_path = os.path.join(os.path.dirname(__file__), 'data', 'token.json')
 
 class gmailer:
     """
@@ -45,7 +45,6 @@ class gmailer:
 
     def fetch_unread_emails(service):
         """Fetch unread emails from gmail account"""
-        # List unread messages
         results = service.users().messages().list(userId='me', labelIds=['INBOX'], q="is:unread").execute()
         messages = results.get('messages', [])
 
@@ -54,25 +53,36 @@ class gmailer:
             print("No unread emails found.")
         else:
             for msg in messages:
-                msg_data = service.users().messages().get(userId='me', id=msg['id']).execute()
-                
+                msg_id = msg['id']
+                msg_data = service.users().messages().get(userId='me', id=msg_id, format='full').execute()
+
+                payload = msg_data['payload']
+                headers = payload['headers']
+
                 # Extract sender and subject
-                for header in msg_data['payload']['headers']:
-                    if header['name'] == 'From':
-                        sender = header['value']
-                    if header['name'] == 'Subject':
-                        subject = header['value']
+                sender = next(header['value'] for header in headers if header['name'] == 'From')
+                subject = next(header['value'] for header in headers if header['name'] == 'Subject')
                 
                 # Get email body
-                parts = msg_data['payload'].get('parts', [])
-                email_body = ""
-                if parts:
-                    for part in parts:
+                body = ""
+                if 'parts' in payload:
+                    for part in payload['parts']:
                         if part['mimeType'] == 'text/plain':
-                            data = part['body']['data']
-                            email_body = base64.urlsafe_b64decode(data).decode()
+                            body = part['body']['data']
+                            break
+
+                if body:
+                    import base64
+                    body = base64.urlsafe_b64decode(body).decode('utf-8')
                 
-                emails.append((sender, subject, email_body, msg['id']))
+                # Append email as a dictionary
+                emails.append({
+                    'id': msg_id,
+                    'sender': sender,
+                    'subject': subject,
+                    'body': body
+                })
+
         return emails
     
     def send_gmail_response(service, to_email, subject, body):
@@ -85,4 +95,4 @@ class gmailer:
 
         # Send the email
         send_message = service.users().messages().send(userId="me", body=create_message).execute()
-        print(f"Email sent to {to_email}")
+        return send_message
