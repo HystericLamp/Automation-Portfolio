@@ -75,7 +75,7 @@ class gmailer:
                     import base64
                     body = base64.urlsafe_b64decode(body).decode('utf-8')
                 
-                # Append email as a dictionary
+                # Append email to list as a dictionary
                 emails.append({
                     'id': msg_id,
                     'sender': sender,

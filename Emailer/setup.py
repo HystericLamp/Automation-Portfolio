@@ -15,14 +15,6 @@ subprocess.check_call(["pip", "install", "pytest"])
 print("pytest installed successfully.")
 
 ######################################################################
-# Email Access Dependencies
-######################################################################
-print("Installing Email Access Dependencies...")
-print("Installing imapclient...")
-subprocess.check_call(["pip", "install", "imapclient"])
-print("imapclient installed successfully.")
-
-######################################################################
 # Gmail API Dependencies
 ######################################################################
 print("Installing Gmail API Dependencies...")

@@ -37,15 +37,6 @@ subprocess.check_call([os.path.join(venv_dir, "bin", "pip") if os.name != "nt"
 print("pytest installed successfully.")
 
 ######################################################################
-# Email Access Dependencies
-######################################################################
-print("Installing Email Access Dependencies...")
-print("Installing imapclient...")
-subprocess.check_call([os.path.join(venv_dir, "bin", "pip") if os.name != "nt" 
-                       else os.path.join(venv_dir, "Scripts", "pip"), "install", "imapclient"])
-print("imapclient installed successfully.")
-
-######################################################################
 # Gmail API Dependencies
 ######################################################################
 print("Installing Gmail API Dependencies...")
@@ -56,3 +47,14 @@ subprocess.check_call([os.path.join(venv_dir, "bin", "pip") if os.name != "nt"
                                                                                  "google-auth-httplib2",
                                                                                  "google-api-python-client"])
 print("google-auth, google-auth-oauthlib, google-auth-httplib2, google-api-python-client installed successfully.")
+
+######################################################################
+# Hugging Face Model Dependencies
+######################################################################
+print("Installing Hugging Face Model Dependencies...")
+print("Installing transformers, torch")
+subprocess.check_call([os.path.join(venv_dir, "bin", "pip") if os.name != "nt" 
+                    else os.path.join(venv_dir, "Scripts", "pip"), "install", "transformers",
+                                                                                "torch"])
+print("transformers and torch installed successfully.")
+
