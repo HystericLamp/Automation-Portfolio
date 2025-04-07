@@ -1,44 +1,42 @@
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
+import requests
+import json
 
 class dialoGPT_handler:
     """
     Class that initializes and handles DialoGPT model interactions and responses
     """
-    def __init__(self):
-        # Load DialoGPT model and tokenizer
-        self.model_name = "microsoft/DialoGPT-medium"
-        
-        self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
-        self.tokenizer.pad_token = self.tokenizer.eos_token
-        
-        self.model = AutoModelForCausalLM.from_pretrained(self.model_name)
+    def __init__(self, api_url, api_token):
+        """Connects with HuggingFaces DialoGPT API with Token"""
+        self.api_url = api_url
+        self.headers = {
+            "Authorization": f"Bearer {api_token}",
+            "Content-Type": "application/json",
+        }
 
-        self.chat_history_ids = None
+        self.chat_history = []
     
     def get_response(self, prompt):
-        """Gets and returns a response from the AI model"""
-        new_input_ids = self.tokenizer.encode(prompt + self.tokenizer.eos_token, return_tensors="pt")
-        if self.chat_history_ids is not None:
-            input_ids = torch.cat([self.chat_history_ids, new_input_ids], dim=-1)
+        """Gets and returns a response from the cloud-hosted DialoGPT model"""
+        self.chat_history.append({"role": "user", "content": prompt})
+
+        payload = {
+            "inputs": {"text": prompt},
+            "parameters": {
+                "max_length": 50,
+                "temperature": 0.7,
+                "do_sample": True,
+                "num_return_sequences": 1,
+            },
+        }
+
+        response = requests.post(self.api_url, headers=self.headers, json=payload)
+
+        if response.status_code == 200:
+            result = response.json()
+            generated_text = result['generated_text']
+            self.chat_history.append({"role": "assistant", "content": generated_text})
+            return generated_text
         else:
-            input_ids = new_input_ids
-        
-        
-        attention_mask = input_ids.ne(self.tokenizer.pad_token_id).long()
-
-        output_ids = self.model.generate(
-            input_ids,
-            attention_mask=attention_mask,
-            max_length=50,
-            pad_token_id=self.tokenizer.eos_token_id,
-            num_return_sequences=1,
-            temperature=0.0,
-            do_sample=False,
-            num_beams=3,
-        )
-
-        self.chat_history_ids = output_ids
-        reply = self.tokenizer.decode(output_ids[:, input_ids.shape[-1]:][0], skip_special_tokens=True)
-
-        return reply
+            return f"Error: {response.status_code}, {response.text}"

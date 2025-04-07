@@ -11,6 +11,7 @@ notes/
 Scripts/
 pyvenv.cfg
 .venv/
+.env
 
 # Django related 
 # src/<yourproject>/settings/local.py

@@ -14,6 +14,13 @@ print("Installing pytest...")
 subprocess.check_call(["pip", "install", "pytest"])
 print("pytest installed successfully.")
 
+#####################################################################
+# Python-dotenv
+#####################################################################
+print("Installing python-dotenv...")
+subprocess.check_call(["pip", "install", "python-dotenv"])
+print("python-dotenv installed successfully.")
+
 ######################################################################
 # Gmail API Dependencies
 ######################################################################
