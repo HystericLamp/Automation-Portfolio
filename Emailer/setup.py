@@ -14,13 +14,6 @@ print("Installing pytest...")
 subprocess.check_call(["pip", "install", "pytest"])
 print("pytest installed successfully.")
 
-#####################################################################
-# Python-dotenv
-#####################################################################
-print("Installing python-dotenv...")
-subprocess.check_call(["pip", "install", "python-dotenv"])
-print("python-dotenv installed successfully.")
-
 ######################################################################
 # Gmail API Dependencies
 ######################################################################
@@ -31,3 +24,22 @@ subprocess.check_call(["pip", "install", "google-auth",
                        "google-auth-httplib2",
                        "google-api-python-client"])
 print("google-auth, google-auth-oauthlib, google-auth-httplib2, google-api-python-client installed successfully.")
+
+######################################################################
+# Hugging Face Model Dependencies
+######################################################################
+print("Installing Hugging Face Model Dependencies...")
+print("Installing transformers, torch")
+subprocess.check_call(["pip", "install", "transformers", "torch"])
+print("transformers and torch installed successfully.")
+
+#####################################################################
+# Misc
+#####################################################################
+print("Installing python-dotenv...")
+subprocess.check_call(["pip", "install", "python-dotenv"])
+print("python-dotenv installed successfully.")
+
+print("Installing requests...")
+subprocess.check_call(["pip", "install", "requests"])
+print("requests installed successfully.")

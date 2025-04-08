@@ -58,3 +58,16 @@ subprocess.check_call([os.path.join(venv_dir, "bin", "pip") if os.name != "nt"
                                                                                 "torch"])
 print("transformers and torch installed successfully.")
 
+
+#####################################################################
+# Misc
+#####################################################################
+print("Installing python-dotenv...")
+subprocess.check_call([os.path.join(venv_dir, "bin", "pip") if os.name != "nt" 
+                       else os.path.join(venv_dir, "Scripts", "pip"), "install", "python-dotenv"])
+print("python-dotenv installed successfully.")
+
+print("Installing requests...")
+subprocess.check_call([os.path.join(venv_dir, "bin", "pip") if os.name != "nt" 
+                       else os.path.join(venv_dir, "Scripts", "pip"), "install", "requests"])
+print("requests installed successfully.")
