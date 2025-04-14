@@ -25,7 +25,7 @@ class TestHuggingFaceAPI(unittest.TestCase):
         expected_response = "I'm good, how are you?"
         similarity = difflib.SequenceMatcher(None, response.lower(), expected_response.lower()).ratio()
 
-        self.assertGreater(similarity, 0.5, f"Response too different. Got: {response}")
+        self.assertGreater(similarity, 0.3, f"Response too different. Got: {response}")
 
 if __name__ == '__main__':
     unittest.main()

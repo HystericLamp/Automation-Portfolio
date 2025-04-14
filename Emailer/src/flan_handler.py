@@ -1,13 +1,13 @@
 import os
 from gradio_client import Client
 
-class dialoGPT_handler:
+class flan_handler:
     """
         Class that initializes and handles DialoGPT model interactions and responses.
         Can be used as an interface to DialoGPT model.
     """
     def __init__(self, client_url, api_url, api_token):
-        """Connects with HuggingFaces DialoGPT API with Token"""
+        """Connects with Google's Flan API on Hugging Faces with Token"""
         self.client_url = client_url
         self.api_url = api_url
         self.api_token = api_token
