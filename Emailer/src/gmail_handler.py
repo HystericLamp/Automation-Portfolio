@@ -12,12 +12,14 @@ SCOPES = ['https://www.googleapis.com/auth/gmail.modify']
 creds_path = os.path.join(os.path.dirname(__file__), 'data', 'credentials.json')
 token_path = os.path.join(os.path.dirname(__file__), 'data', 'token.json')
 
-class gmailer:
+class GmailHandler:
     """
         Class that handles gmail API requests and operations on gmail
     """
     def authenticate_gmail():
-        """authorize the application and generate a token.json file for future API requests"""
+        """
+            Authorize the application and generate a token.json file for future API requests
+        """
         creds = None
 
         data_folder = os.path.dirname(token_path)

@@ -7,7 +7,9 @@ from dotenv import load_dotenv
 # Get the absolute path of the src folder and add it to sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
-from flan_handler import flan_handler
+from flan_handler import FlanHandler
+
+# TODO: Change tests to be more consistent with varied responses from model.
 
 class FlanTest(unittest.TestCase):
     @classmethod
@@ -22,7 +24,7 @@ class FlanTest(unittest.TestCase):
             How's the business going?
         """
 
-        flan = flan_handler(self.client_url, self.api_url, self.api_token)
+        flan = FlanHandler(self.client_url, self.api_url, self.api_token)
         response = flan.get_response(prompt)
 
         expected_response = """
@@ -50,7 +52,7 @@ class FlanTest(unittest.TestCase):
             Thank you.
         """
 
-        flan = flan_handler(self.client_url, self.api_url, self.api_token)
+        flan = FlanHandler(self.client_url, self.api_url, self.api_token)
         response = flan.get_response(prompt)
 
         expected_response = """
@@ -72,7 +74,7 @@ class FlanTest(unittest.TestCase):
 
         # Turn 1
         user_input_1 = "Hi, I need help with my account."
-        flan = flan_handler(self.client_url, self.api_url, self.api_token)
+        flan = FlanHandler(self.client_url, self.api_url, self.api_token)
         response_1 = flan.get_response(user_input_1)
         self.assertIsInstance(response_1, str)
         self.assertGreater(len(response_1), 10)

@@ -5,7 +5,7 @@ import sys
 # Get the absolute path of the src folder and add it to sys.path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 
-from gmail_handler import gmailer
+from gmail_handler import GmailHandler
 
 token_path = os.path.join(os.path.dirname(__file__), '..', 'src', 'data', 'token.json')
 creds_path = os.path.join(os.path.dirname(__file__), '..', 'src', 'data', 'credentials.json')
@@ -16,7 +16,7 @@ class GmailIntegrationTest(unittest.TestCase):
     def setUp(self):
         """Set up for integration tests"""
         if GmailIntegrationTest.service is None:
-            GmailIntegrationTest.service = gmailer.authenticate_gmail()
+            GmailIntegrationTest.service = GmailHandler.authenticate_gmail()
 
         self.service = GmailIntegrationTest.service
 
@@ -35,7 +35,7 @@ class GmailIntegrationTest(unittest.TestCase):
         self.assertIsNotNone(self.service, "Service is not authenticated!")
 
         # Fetch unread emails
-        messages = gmailer.fetch_unread_emails(self.service)
+        messages = GmailHandler.fetch_unread_emails(self.service)
         self.assertIsInstance(messages, list)
         self.assertGreater(len(messages), 0, "No unread emails found!")
         
@@ -53,7 +53,7 @@ class GmailIntegrationTest(unittest.TestCase):
         subject = "Test Email from Automation Script"
         body = "This is a test email to verify sending functionality."
 
-        result = gmailer.send_gmail_response(self.service, recipient, subject, body)
+        result = GmailHandler.send_gmail_response(self.service, recipient, subject, body)
         self.assertTrue(result, "Failed to send the email!")
 
     # def tearDown(self):

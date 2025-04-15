@@ -7,7 +7,7 @@ import base64
 # Get the absolute path of the src folder and add it to sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
-from gmail_handler import gmailer
+from gmail_handler import GmailHandler
 
 class GmailTest(unittest.TestCase):
     @patch('gmail_handler.InstalledAppFlow.from_client_secrets_file')
@@ -35,7 +35,7 @@ class GmailTest(unittest.TestCase):
         mock_flow.return_value = mock_flow_instance
         mock_flow_instance.run_local_server.return_value = mock_creds
 
-        service = gmailer.authenticate_gmail()
+        service = GmailHandler.authenticate_gmail()
 
         # Assert that the service is created properly
         self.assertEqual(service, mock_service)
@@ -56,7 +56,7 @@ class GmailTest(unittest.TestCase):
             'messages': []
         }
 
-        emails = gmailer.fetch_unread_emails(self.mock_service)
+        emails = GmailHandler.fetch_unread_emails(self.mock_service)
         self.assertEqual(emails, [])
 
     def test_fetch_unread_emails_with_emails(self):
@@ -90,7 +90,7 @@ class GmailTest(unittest.TestCase):
             Mock(execute=Mock(return_value=mock_msg_2))
         ]
 
-        emails = gmailer.fetch_unread_emails(self.mock_service)
+        emails = GmailHandler.fetch_unread_emails(self.mock_service)
         self.assertEqual(len(emails), 2)
         self.assertEqual(emails[0], ('sender1@example.com', 'Subject 1', 'Body 1', '123'))
         self.assertEqual(emails[1], ('sender2@example.com', 'Subject 2', 'Body 2', '456'))
@@ -100,7 +100,7 @@ class GmailTest(unittest.TestCase):
         self.mock_service.users().messages().send.return_value.execute.return_value = {'id': 'abc123'}
         
         with patch('builtins.print') as mock_print:
-            gmailer.send_gmail_response(self.mock_service, 'to@example.com', 'Test Subject', 'Test Body')
+            GmailHandler.send_gmail_response(self.mock_service, 'to@example.com', 'Test Subject', 'Test Body')
             mock_print.assert_called_with('Email sent to to@example.com')
     
 if __name__ == '__main__':
