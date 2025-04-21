@@ -11,9 +11,13 @@ class ServiceFactory:
     @staticmethod
     def create_gmail_service():
         return GmailHandler.authenticate_gmail()
+    
+    @staticmethod
+    def create_gmail_handler():
+        return None
 
     @staticmethod
-    def create_ai_service():
+    def create_flan_handler():
         load_dotenv()
         client_url = str(os.getenv("HF_SPACE_URL"))
         api_url = str(os.getenv("HF_URL_ENDPOINT"))

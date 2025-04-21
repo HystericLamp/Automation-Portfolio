@@ -16,6 +16,8 @@ class GmailHandler:
     """
         Class that handles gmail API requests and operations on gmail
     """
+    
+    @staticmethod
     def authenticate_gmail():
         """
             Authorize the application and generate a token.json file for future API requests
