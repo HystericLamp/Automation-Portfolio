@@ -22,3 +22,6 @@ class AiGmailAgentTest(unittest.TestCase):
 
         result = self.agent.process_emails(emails)
         self.assertTrue(result, "Failed to process emails")
+
+if __name__ == '__main__':
+    unittest.main()

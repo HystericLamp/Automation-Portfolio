@@ -14,16 +14,19 @@ class ServiceFactory:
     
     @staticmethod
     def create_gmail_handler():
-        return None
+        return GmailHandler()
 
     @staticmethod
     def create_flan_handler():
         load_dotenv()
-        client_url = str(os.getenv("HF_SPACE_URL"))
-        api_url = str(os.getenv("HF_URL_ENDPOINT"))
+        client_api = str(os.getenv("HF_SPACE_API"))
+        api_endpoint = str(os.getenv("HF_URL_ENDPOINT"))
         api_token = str(os.getenv("RHF_API_TOKEN"))
+        space_url = str(os.getenv("HF_SPACE_URL"))
+
         return FlanHandler(
-            client_url,
-            api_url,
+            client_api,
+            api_endpoint,
             api_token,
+            space_url
         )

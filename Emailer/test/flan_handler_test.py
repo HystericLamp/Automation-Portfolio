@@ -15,16 +15,22 @@ class FlanTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         load_dotenv()
-        cls.api_url = str(os.getenv("HF_URL_ENDPOINT"))
+        cls.client_api = str(os.getenv("HF_SPACE_API"))
+        cls.api_endpoint = str(os.getenv("HF_URL_ENDPOINT"))
         cls.api_token = str(os.getenv("RHF_API_TOKEN"))
-        cls.client_url = str(os.getenv("HF_SPACE_URL"))
+        cls.space_url = str(os.getenv("HF_SPACE_URL"))
+
+    def test_flan_space_wake_up(self):
+        flan = FlanHandler(self.client_api, self.api_endpoint, self.api_token, self.space_url)
+        response_code = flan.wake_up_space()
+        self.assertEqual(response_code, 200, f"Failed to wake up space with response code {response_code}")
 
     def test_flan_basic_response(self):
         prompt = """
             How's the business going?
         """
 
-        flan = FlanHandler(self.client_url, self.api_url, self.api_token)
+        flan = FlanHandler(self.client_api, self.api_endpoint, self.api_token, self.space_url)
         response = flan.get_response(prompt)
 
         expected_response = """
@@ -52,7 +58,7 @@ class FlanTest(unittest.TestCase):
             Thank you.
         """
 
-        flan = FlanHandler(self.client_url, self.api_url, self.api_token)
+        flan = FlanHandler(self.client_api, self.api_endpoint, self.api_token, self.space_url)
         response = flan.get_response(prompt)
 
         expected_response = """
@@ -74,7 +80,7 @@ class FlanTest(unittest.TestCase):
 
         # Turn 1
         user_input_1 = "Hi, I need help with my account."
-        flan = FlanHandler(self.client_url, self.api_url, self.api_token)
+        flan = FlanHandler(self.client_api, self.api_endpoint, self.api_token, self.space_url)
         response_1 = flan.get_response(user_input_1)
         self.assertIsInstance(response_1, str)
         self.assertGreater(len(response_1), 10)

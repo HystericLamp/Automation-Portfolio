@@ -46,8 +46,18 @@ class GmailHandler:
             token.write(creds.to_json())
 
         return build('gmail', 'v1', credentials=creds)
+    
+    def mark_as_read(self, service, msg_id):
+        """Mark an email as read by removing the UNREAD label."""
+        service.users().messages().modify(
+            userId='me',
+            id=msg_id,
+            body={'removeLabelIds': ['UNREAD']}
+        ).execute()
 
-    def fetch_unread_emails(service):
+        return True
+
+    def fetch_unread_emails(self, service):
         """Fetch unread emails from gmail account"""
         results = service.users().messages().list(userId='me', labelIds=['INBOX'], q="is:unread").execute()
         messages = results.get('messages', [])
@@ -89,7 +99,7 @@ class GmailHandler:
 
         return emails
     
-    def send_gmail_response(service, to_email, subject, body):
+    def send_gmail_response(self, service, to_email, subject, body):
         message = MIMEText(body)
         message['to'] = to_email
         message['subject'] = subject

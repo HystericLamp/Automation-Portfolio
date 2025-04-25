@@ -46,21 +46,27 @@ class AiGmailAgent:
         if emails is [] or None:
             return
         
-        for email in emails:
-            sender = email['sender']
-            subject = email['subject']
-            body = email['body']
+        http_code = self.flan_handler.wake_up_space()
+        if (http_code == 200):
+            for email in emails:
+                msg_id = email['id']
+                sender = email['sender']
+                subject = email['subject']
+                body = email['body']
 
-            try:
-                response = self.flan_handler.get_response(body)
-            except:
-                print("Problem with getting a response from AI Model occurred")
-                return False
+                try:
+                    response = self.flan_handler.get_response(body)
+                except:
+                    print("Problem with getting a response from AI Model occurred")
+                    return False
 
-            try:
-                self.gmail_handler.send_gmail_response(self.gmail_service, sender, subject, response)
-            except:
-                print("Problem with sending an email occurred")
-                return False
+                try:
+                    self.gmail_handler.mark_as_read(self.gmail_service, msg_id)
+                    self.gmail_handler.send_gmail_response(self.gmail_service, sender, subject, response)
+                except:
+                    print("Problem with sending an email occurred")
+                    return False
 
-        return True
+            return True
+        
+        return False
