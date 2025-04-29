@@ -53,7 +53,7 @@ class GmailIntegrationTest(unittest.TestCase):
         subject = "Test Email from Automation Script"
         body = "This is a test email to verify sending functionality."
 
-        result = GmailHandler.send_gmail_response(self.service, recipient, subject, body)
+        result = GmailHandler.send_gmail(self.service, recipient, subject, body)
         self.assertTrue(result, "Failed to send the email!")
 
     # def tearDown(self):

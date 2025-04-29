@@ -62,7 +62,7 @@ class AiGmailAgent:
 
                 try:
                     self.gmail_handler.mark_as_read(self.gmail_service, msg_id)
-                    self.gmail_handler.send_gmail_response(self.gmail_service, sender, subject, response)
+                    self.gmail_handler.send_gmail(self.gmail_service, sender, subject, response)
                 except:
                     print("Problem with sending an email occurred")
                     return False

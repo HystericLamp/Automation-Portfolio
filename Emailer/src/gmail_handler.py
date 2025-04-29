@@ -73,10 +73,12 @@ class GmailHandler:
                 payload = msg_data['payload']
                 headers = payload['headers']
 
-                # Extract sender and subject
+                # Extract any relevant data
                 sender = next(header['value'] for header in headers if header['name'] == 'From')
                 subject = next(header['value'] for header in headers if header['name'] == 'Subject')
-                
+                thread_id = msg_data['threadId']
+                message_id = next((header['value'] for header in headers if header['name'] == 'Message-ID'), None)
+
                 # Get email body
                 body = ""
                 if 'parts' in payload:
@@ -92,6 +94,8 @@ class GmailHandler:
                 # Append email to list as a dictionary
                 emails.append({
                     'id': msg_id,
+                    'thread_id': thread_id,
+                    'message_id': message_id,
                     'sender': sender,
                     'subject': subject,
                     'body': body
@@ -99,7 +103,7 @@ class GmailHandler:
 
         return emails
     
-    def send_gmail_response(self, service, to_email, subject, body):
+    def send_gmail(self, service, to_email, subject, body):
         message = MIMEText(body)
         message['to'] = to_email
         message['subject'] = subject
@@ -107,6 +111,21 @@ class GmailHandler:
         encoded_message = base64.urlsafe_b64encode(message.as_bytes()).decode()
         create_message = {'raw': encoded_message}
 
-        # Send the email
+        send_message = service.users().messages().send(userId="me", body=create_message).execute()
+        return send_message
+    
+    def send_gmail_reply(self, service, to_email, subject, body, thread_id, message_id):
+        message = MIMEText(body)
+        message['to'] = to_email
+        message['subject'] = f"Re: {subject}"
+        message['In-Reply-To'] = message_id
+        message['References'] = message_id
+
+        encoded_message = base64.urlsafe_b64encode(message.as_bytes()).decode()
+        create_message = {
+            'raw': encoded_message,
+            'threadId': thread_id
+        }
+
         send_message = service.users().messages().send(userId="me", body=create_message).execute()
         return send_message

@@ -100,7 +100,7 @@ class GmailTest(unittest.TestCase):
         self.mock_service.users().messages().send.return_value.execute.return_value = {'id': 'abc123'}
         
         with patch('builtins.print') as mock_print:
-            GmailHandler.send_gmail_response(self.mock_service, 'to@example.com', 'Test Subject', 'Test Body')
+            GmailHandler.send_gmail(self.mock_service, 'to@example.com', 'Test Subject', 'Test Body')
             mock_print.assert_called_with('Email sent to to@example.com')
     
 if __name__ == '__main__':
