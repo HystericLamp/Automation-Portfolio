@@ -23,10 +23,12 @@ class FlanHandler:
                 print("Space is up!")
             else:
                 print(f"Space responded with status: {r.status_code}")
+                return False
         except requests.exceptions.Timeout:
             print("Space is starting... took too long to respond")
+            return False
 
-        return r.status_code
+        return True
     
     def get_response(self, input):
         """Gets and returns a response from the cloud-hosted Flan model"""

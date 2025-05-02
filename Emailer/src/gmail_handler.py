@@ -35,7 +35,12 @@ class GmailHandler:
         # If no valid credentials available, authenticate user
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
-                creds.refresh(Request())
+                try:
+                    creds.refresh(Request())
+                except Exception as e:
+                    print("Refresh failed, removing old token and retrying authentication:", e)
+                    os.remove(token_path)
+                    return GmailHandler.authenticate_gmail()
             else:
                 # Load credentials.json (OAuth file)
                 flow = InstalledAppFlow.from_client_secrets_file(creds_path, SCOPES)

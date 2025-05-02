@@ -46,10 +46,12 @@ class AiGmailAgent:
         if emails is [] or None:
             return
         
-        http_code = self.flan_handler.wake_up_space()
-        if (http_code == 200):
+        http_status = self.flan_handler.wake_up_space()
+        if (http_status):
             for email in emails:
                 msg_id = email['id']
+                thread_id = email['thread_id']
+                message_id = email['message_id']
                 sender = email['sender']
                 subject = email['subject']
                 body = email['body']
@@ -62,7 +64,7 @@ class AiGmailAgent:
 
                 try:
                     self.gmail_handler.mark_as_read(self.gmail_service, msg_id)
-                    self.gmail_handler.send_gmail(self.gmail_service, sender, subject, response)
+                    self.gmail_handler.send_gmail_reply(self.gmail_service, sender, subject, response, thread_id, message_id)
                 except:
                     print("Problem with sending an email occurred")
                     return False
