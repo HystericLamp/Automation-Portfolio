@@ -18,7 +18,7 @@ class FlanHandler:
         print(f"Pinging {self.space_url} to wake up the Space...")
 
         try:
-            r = requests.get(self.space_url, timeout=60)
+            r = requests.get(self.space_url, timeout=300)
             if r.status_code == 200:
                 print("Space is up!")
             else:
