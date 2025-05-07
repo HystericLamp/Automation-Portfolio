@@ -9,8 +9,8 @@ from email.mime.text import MIMEText
 
 SCOPES = ['https://www.googleapis.com/auth/gmail.modify']
 
-creds_path = os.path.join(os.path.dirname(__file__), 'data', 'credentials.json')
-token_path = os.path.join(os.path.dirname(__file__), 'data', 'token.json')
+creds_path = os.path.join(os.path.dirname(__file__), 'tmp', 'credentials.json')
+token_path = os.path.join(os.path.dirname(__file__), 'tmp', 'token.json')
 
 class GmailHandler:
     """

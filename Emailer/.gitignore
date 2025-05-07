@@ -171,6 +171,7 @@ Thumbs.db
 
 # Ignore data folder
 src/data
+src/tmp
 
 # Lambda required folders
 my_lambda_container/
