@@ -1,16 +1,22 @@
 import os.path
-import sys
 import base64
 from googleapiclient.discovery import build
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from email.mime.text import MIMEText
+from dotenv import load_dotenv
 
 SCOPES = ['https://www.googleapis.com/auth/gmail.modify']
 
-creds_path = os.path.join(os.path.dirname(__file__), 'tmp', 'credentials.json')
-token_path = os.path.join(os.path.dirname(__file__), 'tmp', 'token.json')
+load_dotenv()
+if os.getenv("AWS_LAMBDA_FUNCTION_NAME"):
+    creds_path = os.path.join(os.path.dirname(__file__), 'data', 'credentials.json')
+    token_path = os.path.join('/tmp', 'token.json')
+else:
+    tmp_dir = os.path.join(os.path.dirname(__file__), 'data')
+    creds_path = os.path.join(tmp_dir, 'credentials.json')
+    token_path = os.path.join(tmp_dir, 'token.json')
 
 class GmailHandler:
     """
@@ -32,19 +38,20 @@ class GmailHandler:
         if os.path.exists(token_path):
             creds = Credentials.from_authorized_user_file(token_path)
 
-        # If no valid credentials available, authenticate user
-        if not creds or not creds.valid:
-            if creds and creds.expired and creds.refresh_token:
-                try:
-                    creds.refresh(Request())
-                except Exception as e:
-                    print("Refresh failed, removing old token and retrying authentication:", e)
-                    os.remove(token_path)
-                    return GmailHandler.authenticate_gmail()
-            else:
-                # Load credentials.json (OAuth file)
-                flow = InstalledAppFlow.from_client_secrets_file(creds_path, SCOPES)
-                creds = flow.run_local_server(port=0)
+        if creds and creds.expired and creds.refresh_token:
+            try:
+                creds.refresh(Request())
+            except Exception as e:
+                print("Refresh failed, removing old token and retrying authentication:", e)
+                os.remove(token_path)
+                return GmailHandler.authenticate_gmail()
+        elif not creds or not creds.valid:
+            if os.getenv("AWS_LAMBDA_FUNCTION_NAME"):
+                raise RuntimeError("No valid token.json and cannot run OAuth flow in AWS Lambda.")
+            flow = InstalledAppFlow.from_client_secrets_file(creds_path, ['https://www.googleapis.com/auth/gmail.modify'])
+            creds = flow.run_local_server(port=0)
+            with open(token_path, 'w') as token:
+                token.write(creds.to_json())
 
         # Save token for future use
         with open(token_path, 'w') as token:
