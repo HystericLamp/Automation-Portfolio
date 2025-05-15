@@ -12,7 +12,7 @@ SCOPES = ['https://www.googleapis.com/auth/gmail.modify']
 load_dotenv()
 if os.getenv("AWS_LAMBDA_FUNCTION_NAME"):
     creds_path = os.path.join(os.path.dirname(__file__), 'data', 'credentials.json')
-    token_path = os.path.join('/tmp', 'token.json')
+    token_path = "/tmp/token.json"
 else:
     tmp_dir = os.path.join(os.path.dirname(__file__), 'data')
     creds_path = os.path.join(tmp_dir, 'credentials.json')
